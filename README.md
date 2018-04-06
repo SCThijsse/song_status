@@ -11,7 +11,7 @@ to read a file containing the playback data.
 
 ## Installation
 
-Get the latest stable release from the [Releases Page](https://github.com/nvloff/song_status/releases).
+Get the latest stable release from the [Releases Page](https://github.com/nvloff/song_status/releases). (Note: use the named `.zip`, while the source `.zip` will also work, it contains code for testing)
 
 Then go to the `Scripts` tab in the Streamlabs bot and `Import` the `.zip` file
 ## Usage
