@@ -1,0 +1,21 @@
+{
+    "playing": true,
+    "song": {
+        "title": "Shadowplay",
+        "artist": "Joy Division",
+        "album": "Unknown Pleasures",
+        "albumArt": "https://lh4.ggpht.com/9t2KaUcnqM-kvM3_xlg409mW0WWsjZEE8ull7Ny3XLCB3ssL1qz1YywxNLcmzN_nI7Ln7tjndQ=s180-c-e100"
+    },
+    "rating": {
+        "liked": false,
+        "disliked": false
+    },
+    "time": {
+        "current": 12016,
+        "total": 233000
+    },
+    "songLyrics": "To the centre of the city where all roads meet, waiting for you\nTo the depths of the ocean where all hopes sank, searching for you\nI was moving through the silence without motion, waiting for you\nIn a room with a window in the corner, I found truth\n\nIn the shadowplay, acting out your own death, knowing no more\nAs the assassins all grouped in four lines, dancing on the floor\nAnd with cold steel, odour on their bodies, made a move to connect\nI could only stare in disbelief as the crowds all left\n\nI did everything, everything I wanted to\nI let them use you for their own ends\nTo the centre of the city in the night, waiting for you\nTo the centre of the city in the night, waiting for you",
+    "shuffle": "NO_SHUFFLE",
+    "repeat": "NO_REPEAT",
+    "volume": 35
+}
