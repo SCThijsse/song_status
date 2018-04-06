@@ -23,6 +23,7 @@ Use the `$song_status` variable in any command to display the song status.
  * Message to display when player is stopped.
  * Message to display when song in paused.
  * Debug flag to allow song display, even when the stream is offline
+ * Specify the location of player's JSON interface(defaults to windows - `%APPDATA%\Google Play Music Desktop Player\json_store\playback.json`)
  
  
  ## License
