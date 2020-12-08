@@ -1,19 +1,5 @@
 {
   "output_file": "settings.json",
-  "paused_message": {
-    "type": "textbox",
-    "value": "Player paused.",
-    "label": "$song_status when player is paused",
-    "tooltip": "",
-    "group": "Messages"
-  },
-  "stopped_message": {
-    "type": "textbox",
-    "value": "Player stopped.",
-    "label": "$song_status when player is stopped(also used when stream is offline)",
-    "tooltip": "",
-    "group": "Messages"
-  },
   "offline_message": {
     "type": "textbox",
     "value": "We offline :(",
@@ -30,14 +16,14 @@
   },
   "debug": {
     "type": "checkbox",
-    "value": false,
+    "value": true,
     "tooltip": "Show song status when stream is offline",
     "label": "Show song status when stream is offline",
     "group": "Debug"
   },
   "data_path": {
     "type": "textbox",
-    "value": "%APPDATA%\\Google Play Music Desktop Player\\json_store\\playback.json",
+    "value": "%APPDATA%\\youtube-music-desktop-app\\logs\\main.log",
     "label": "Path to Player's JSON Interface file",
     "tooltip": "",
     "group": "Debug"

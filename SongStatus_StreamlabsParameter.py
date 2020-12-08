@@ -2,20 +2,22 @@ import sys
 import os
 import json
 import codecs
+import re
 
-ScriptName = "Google Play Current Song"
-Website = "https://github.com/nvloff/song_status"
-Description = "Provides variables to show the currently playing song from Google Desktop Player"
-Creator = "Nikolai Vladimirov<nikolay@vladimiroff.com>"
+ScriptName = "Youtube Music Current Song"
+Website = "https://github.com/SCThijsse/song_status"
+Description = "Provides variables to show the currently playing song from Youtube Music"
+Creator = "Sjoerd Thijsse<sjoerdthijsse@gmail.com>"
 
-Version = "1.0.0.0"
+Version = "1.0.0"
 
 m_SongStatusVar = "$song_status"
+m_SongExtractor = r'\[.*\]\s\[.*\]\sListen:\s(.*)\s-\s(.*)'
 
 
 class Messages:
     IO_ERROR = "I/O error({0}): {1} reading file {2}"
-    JSON_PARSE_ERROR = "Failed to parse JSON file at %s"
+    LOG_PARSE_ERROR = "Failed to parse LOG file at %s"
     UNKNOWN_ERROR = "Unknown exception %s"
     PLAYER_ERROR = "Error loading song."
 
@@ -25,12 +27,6 @@ class Messages:
     def not_available(self):
         return self._settings.not_available_message()
 
-    def stopped(self):
-        return self._settings.stopped_message()
-
-    def paused(self):
-        return self._settings.paused_message()
-
     def status_format(self):
         return self._settings.status_format()
 
@@ -38,7 +34,7 @@ class Messages:
         return self._settings.offline_message()
 
 
-class JsonDataParser:
+class LogDataParser:
     def __init__(self, path):
         self.path = path
         self.data = {}
@@ -52,11 +48,19 @@ class JsonDataParser:
 
         try:
             with open(self.path, "r") as f:
-                self.data = json.load(f)
+                lines = f.read().splitlines()
+                match = re.search(m_SongExtractor, lines[-1])
+                if match:
+                    self.data = {
+                        "artist": match.group(1),
+                        "title": match.group(2)
+                    }
+                else:
+                    self.set_load_error(Messages.LOG_PARSE_ERROR % self.path)
         except IOError as (errno, strerror):
             self.set_load_error(Messages.IO_ERROR.format(errno, strerror, self.path))
         except ValueError:
-            self.set_load_error(Messages.JSON_PARSE_ERROR % self.path)
+            self.set_load_error(Messages.LOG_PARSE_ERROR % self.path)
         except:
             self.set_load_error(Messages.UNKNOWN_ERROR % sys.exc_info()[0])
 
@@ -80,23 +84,11 @@ class SongStatus:
     def __init__(self, data):
         self.data = data or {}
 
-    def is_stopped(self):
-        return not self.data
-
-    def is_playing(self):
-        return not self.is_stopped() and self.data['playing'] is True
-
-    def is_paused(self):
-        return not self.is_stopped() and not self.is_playing()
-
     def artist(self):
-        return None if (not self.is_playing()) else self.song()['artist']
+        return self.data['artist']
 
     def title(self):
-        return None if (not self.is_playing()) else self.song()['title']
-
-    def song(self):
-        return self.data.get('song', {})
+        return self.data['title']
 
 
 class DisplayStatus:
@@ -118,11 +110,8 @@ class DisplayStatus:
 
     def song_status(self):
         if self._parser.is_error():
+            Parent.Log(ScriptName, 'test')
             return Messages.PLAYER_ERROR
-        elif self._song_status.is_stopped():
-            return self._messages.stopped()
-        elif self._song_status.is_paused():
-            return self._messages.paused()
         else:
             return self._messages.status_format().format(
                 artist=self._song_status.artist(),
@@ -136,7 +125,7 @@ class DisplayStatus:
         return self
 
     def load_parser(self):
-        self._parser = JsonDataParser(self._path)
+        self._parser = LogDataParser(self._path)
         self._parser.load()
 
     def load_song_status(self):
@@ -147,11 +136,9 @@ class Settings:
     DEFAULTS = {
         "debug": False,
         "not_available_message": "N/A",
-        "paused_message": "Player paused.",
-        "stopped_message": "Player stopped.",
         "status_format": "{artist} - {title}",
         "offline_message": "We offline :(",
-        "data_path": "%APPDATA%\Google Play Music Desktop Player\json_store\playback.json"
+        "data_path": "%APPDATA%\youtube-music-desktop-app\logs\main.log"
     }
 
     def __init__(self):
@@ -159,9 +146,9 @@ class Settings:
         self._loaded = False
         return
 
-    def load(self, json_data):
+    def load(self, data):
         tmp = self.__class__.DEFAULTS.copy()
-        tmp.update(json.loads(json_data))
+        tmp.update(json.loads(data))
 
         self._settings = tmp
         self._loaded = True
@@ -183,12 +170,6 @@ class Settings:
     def not_available_message(self):
         return self._settings["not_available_message"]
 
-    def paused_message(self):
-        return self._settings["paused_message"]
-
-    def stopped_message(self):
-        return self._settings["stopped_message"]
-
     def status_format(self):
         return self._settings["status_format"]
 
@@ -199,8 +180,8 @@ class Settings:
 RuntimeSettings = Settings()
 
 
-def load_settings(json_data):
-    RuntimeSettings.load(json_data)
+def load_settings(data):
+    RuntimeSettings.load(data)
 
 
 def Init():
@@ -212,8 +193,8 @@ def Init():
         Parent.Log(ScriptName, "Failed to load settings from %s", config_file)
 
 
-def ReloadSettings(jsonData):
-    RuntimeSettings.load(jsonData)
+def ReloadSettings(data):
+    RuntimeSettings.load(data)
 
 
 def Parse(ParseString, user, target, message):

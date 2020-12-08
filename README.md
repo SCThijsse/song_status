@@ -1,13 +1,10 @@
-# Current song script for Google Play Music Desktop and StreamlabsBot 
+# Current song script for Youtube Music Desktop and StreamlabsBot 
 
 <img width="490" alt="working" src="https://user-images.githubusercontent.com/127317/38418345-ae67f8d8-39a4-11e8-84e8-742f61e23466.png">
 
 
-This is a small script that provides current song info from [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com/)
+This is a small script that provides current song info from [Youtube Music Desktop Player](https://ytmdesktop.app/)
 and makes it available in [StreamlabsBot](https://streamlabs.com/chatbot).
-
-The script uses the player's [JSON Interface](https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/blob/master/docs/PlaybackAPI.md)
-to read a file containing the playback data.
 
 ## Installation
 
@@ -25,10 +22,8 @@ Use the `$song_status` variable in any command to display the song status.
 
  * status format - display format of the song status(ex. `{artist} - {title}`)
  * Message to display when stream is offline.
- * Message to display when player is stopped.
- * Message to display when song in paused.
  * Debug flag to allow song display, even when the stream is offline
- * Specify the location of player's JSON interface(defaults to windows - `%APPDATA%\Google Play Music Desktop Player\json_store\playback.json`)
+ * Specify the location of player's JSON interface(defaults to windows - `%APPDATA%\youtube-music-desktop-app\logs\main.log`)
  
  
  ## License
